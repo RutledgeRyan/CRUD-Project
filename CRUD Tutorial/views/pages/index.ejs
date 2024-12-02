@@ -1,0 +1,71 @@
+
+<%- include('../partials/head.ejs') %>
+<script>
+
+    let allParkingButtons = document.querySelectorAll('.parking');
+ 
+    allParkingButtons.forEach((parkingButton)=> {parkingButton.addEventListener('click', function(event) {
+ 
+             const parkingButton = event.target;
+ 
+             // Access to an object from the button requires .getAttribute!
+ 
+             let meetingData = parkingButton.getAttribute('data-meeting');
+ 
+             // The object got serialized for the button, so now convert to object
+ 
+             let meetingObj = JSON.parse(meetingData);
+ 
+  
+ 
+             let parking_info_ref = document.querySelector('#parking_info');
+ 
+             parking_info_ref.textContent = "Park in " + meetingObj.parking;
+ 
+             let parking_modal_title_ref = document.querySelector("#parking_for_meeting");
+ 
+             parking_modal_title_ref.textContent = "This is the best parking location for " + meetingObj.location;
+ 
+         })});
+ 
+ </script>
+
+
+<body>
+    <div class="container">
+    <div class="mt-4 p-5 bg-warning text-white rounded">
+        <h1><%= title %></h1>
+  </div>
+  <%- include('../partials/menu.ejs') %>
+
+<div class="d-flex flex-wrap flex-column flex-sm-column flex-md-row flex-lg-row">
+<% data.forEach((meeting)=> { %> <% if (meeting.mandatory) { %> <% console.log(meeting.mandatory) %>
+
+<% } %>
+    <p class="note"><img src="/images/meeting.png">
+        <% if (meeting.mandatory) { %> <%
+        console.log(meeting.mandatory) %>
+        <span class="takenote">Attendance Mandatory!</span>
+    <% } %>
+        <%= meeting.location %>, <%= meeting.dateTime %>, <%= meeting.topic %>
+    
+    <br>
+
+    <% console.log(meeting.id + " meeting -----") %>
+    <!-- Button trigger modal -->
+
+ <% let meetingAsStr=JSON.stringify(meeting); %>
+
+ <button type="button" class="parking btn btn-warning" data-bs-toggle="modal" data-bs-target="#parkingModal" id = "<%=meeting.id %>" data-meeting = "<%= meetingAsStr %>">
+ 
+   Parking
+ 
+ </button>
+</p>
+<% }) %>
+</div>
+<%- include('../partials/footer.ejs') %>
+    </div>
+    <%- include('../partials/parkingModal.ejs') %>
+</body>
+</html>
